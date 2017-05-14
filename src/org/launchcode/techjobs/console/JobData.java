@@ -20,7 +20,7 @@ public class JobData {
     private static Boolean isDataLoaded = false;
 
     private static ArrayList<HashMap<String, String>> allJobs;
-
+    private static ArrayList<HashMap<String, String>> copyJobs;
     /**
      * Fetch list of all values from loaded data,
      * without duplicates, for a given column.
@@ -35,7 +35,7 @@ public class JobData {
 
         ArrayList<String> values = new ArrayList<>();
 
-        for (HashMap<String, String> row : allJobs) {
+        for (HashMap<String, String> row : copyJobs) {
             String aValue = row.get(field);
 
             if (!values.contains(aValue)) {
@@ -51,7 +51,7 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
-        return allJobs;
+        return copyJobs;
     }
 
     /**
@@ -69,15 +69,31 @@ public class JobData {
 
         // load data, if not already loaded
         loadData();
-
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
 
-        for (HashMap<String, String> row : allJobs) {
-
+        for (HashMap<String, String> row : copyJobs) {
             String aValue = row.get(column);
-
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
+
+            }
+        }
+
+        return jobs;
+    }
+    public static ArrayList<HashMap<String, String>> findByValue(String value){
+        loadData();
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        if(value.equals("")){
+            System.out.println("You need a term to search for.");
+        }
+        else {
+            for (HashMap<String, String> i : copyJobs) {
+                for(String j:i.values()){
+                    if(j.toLowerCase().contains(value.toLowerCase())) {
+                        jobs.add(i);
+                    }
+                }
             }
         }
 
@@ -114,8 +130,9 @@ public class JobData {
                 }
 
                 allJobs.add(newJob);
-            }
 
+            }
+            copyJobs = copying(allJobs);
             // flag the data as loaded, so we don't do it twice
             isDataLoaded = true;
 
@@ -123,6 +140,13 @@ public class JobData {
             System.out.println("Failed to load job data");
             e.printStackTrace();
         }
+    }
+    private static ArrayList<HashMap<String, String>> copying(ArrayList<HashMap<String, String>> oldList){
+        ArrayList<HashMap<String, String>> newList = new ArrayList<>(oldList.size());
+        for(HashMap<String, String>copy:oldList){
+            newList.add(copy);
+        }
+        return newList;
     }
 
 }
