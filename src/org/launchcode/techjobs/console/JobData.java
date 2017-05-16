@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -132,7 +133,7 @@ public class JobData {
                 allJobs.add(newJob);
 
             }
-            copyJobs = copying(allJobs);
+            copyJobs = new ArrayList<>(allJobs);
             // flag the data as loaded, so we don't do it twice
             isDataLoaded = true;
 
@@ -141,12 +142,16 @@ public class JobData {
             e.printStackTrace();
         }
     }
-    private static ArrayList<HashMap<String, String>> copying(ArrayList<HashMap<String, String>> oldList){
-        ArrayList<HashMap<String, String>> newList = new ArrayList<>(oldList.size());
-        for(HashMap<String, String>copy:oldList){
-            newList.add(copy);
+    /*private static ArrayList<HashMap<String, String>> copying(ArrayList<HashMap<String, String>> oldList){
+        ArrayList<HashMap<String, String>> newList = new ArrayList<>();
+        for(HashMap<String,String>i:oldList){
+            HashMap<String, String> n = new HashMap<>();
+            for(String j:i.keySet()){
+                n.put(j, i.get(j));
+            }
+            newList.add(n);
         }
         return newList;
-    }
+    }*/
 
 }
